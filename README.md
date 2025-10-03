@@ -27,7 +27,7 @@ Not financial advice — educational use only.
    pip install -r requirements.txt
    ```
 
-3. **Train the model (CSV mode)**
+3. **Train the model**
    ```bash
    python -m cogniti_charts.train --framework tf
    ```
@@ -36,7 +36,7 @@ Not financial advice — educational use only.
    python -m cogniti_charts.train --framework torch
    ```
 
-4. **(Optional) Train on chart images**
+4. **Train on chart images**
    ```bash
    python -m cogniti_charts.image_train --framework tf
    ```
@@ -44,8 +44,7 @@ Not financial advice — educational use only.
 5. **Start the app**
    ```bash
    streamlit run app/streamlit_app.py
-   ```
-   A browser window opens at `http://localhost:8501`.  
+   ``` 
    Upload CSVs or chart screenshots → see predictions and SHAP explanations.
 
 ---
