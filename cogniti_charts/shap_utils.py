@@ -28,15 +28,15 @@ def _kernel_explainer_over_windows(predict_fn, X_bg, X_sm, out_path, feature_nam
 
     def f(z2d):
         z3d = z2d.reshape((-1, L, F)).astype("float32")
-        return predict_fn(z3d)  # must return (N, C) probabilities
+        return predict_fn(z3d)  
 
-    # Use shap.Explainer with Kernel to allow smaller background and faster runs
-    explainer = shap.Explainer(f, bg2[:50], algorithm="permutation")  # permutation = kernel-like fast approx
-    sv_list = explainer(sm2[:50], max_evals=nsamples)  # sv_list.values: (N, D, C)
+  
+    explainer = shap.Explainer(f, bg2[:50], algorithm="permutation")  
+    sv_list = explainer(sm2[:50], max_evals=nsamples)  
 
-    # Convert multi-class to a single importance matrix by summing abs across classes
-    sv = sv_list.values  # (N, D, C)
-    sv_mag = np.sum(np.abs(sv), axis=2)  # (N, D)
+    
+    sv = sv_list.values 
+    sv_mag = np.sum(np.abs(sv), axis=2)  
     return save_summary_plot(sv_mag, sm2[:50], path=out_path, feature_names=feature_names)
 
 def explain_tf_timeseries(model, X_bg, X_sample, feature_names=None, out_path="models/shap_summary_tf.png"):
@@ -45,8 +45,7 @@ def explain_tf_timeseries(model, X_bg, X_sample, feature_names=None, out_path="m
     Works even in eager mode and arbitrary Keras models.
     """
     def predict_fn(x3d):
-        # model: Keras; return softmax probabilities (N, C)
-        # If model returns logits, apply softmax here.
+        
         y = model.predict(x3d, verbose=0)
         return y
     return _kernel_explainer_over_windows(predict_fn, X_bg, X_sample, out_path, feature_names=feature_names)
