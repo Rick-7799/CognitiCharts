@@ -31,7 +31,7 @@ Not financial advice — educational use only.
    ```bash
    python -m cogniti_charts.train --framework tf
    ```
-   or
+   
    ```bash
    python -m cogniti_charts.train --framework torch
    ```
