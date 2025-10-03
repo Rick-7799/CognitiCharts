@@ -10,7 +10,7 @@ Not financial advice — educational use only.
 ## Tech
 - **TensorFlow & PyTorch**: dual training backends for flexibility.  
 - **SHAP**: interpretability (feature & image attributions).  
-- **Streamlit**: interactive dashboard for predictions.
+
 
 ---
 
