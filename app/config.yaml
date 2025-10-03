@@ -1,0 +1,12 @@
+data:
+  lookback: 60
+model:
+  framework: "tf"
+  epochs: 30
+  batch_size: 64
+  learning_rate: 0.0005
+  num_classes: 3
+image:
+  per_class: 200
+  fig_size: [4,3]
+  img_size: 224
