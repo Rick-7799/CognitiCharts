@@ -84,17 +84,17 @@ def main():
     ap.add_argument("--lookback", type=int, default=60)
     args = ap.parse_args()
 
-    # 1) Load/label/split
+    
     df = load_prices(args.csv)
     df = label_patterns(df, lookback=args.lookback)
     tr, va, te = train_test_split_time(df, test_ratio=0.2, val_ratio=0.1)
 
-    # 2) To windows
+  
     Xtr, ytr = build_xy(tr, args.lookback)
     Xva, yva = build_xy(pd.concat([tr.iloc[-args.lookback+1:], va]), args.lookback)
     Xte, yte = build_xy(pd.concat([va.iloc[-args.lookback+1:], te]), args.lookback)
 
-    # 3) Class weights (normalize+clip)
+  
     classes = np.unique(ytr)
     cw = compute_class_weight(class_weight="balanced", classes=classes, y=ytr)
     class_weight = {int(c): float(w) for c, w in zip(classes, cw)}
@@ -103,7 +103,7 @@ def main():
         class_weight[k] = float(np.clip(class_weight[k]/mean_w, 0.6, 2.0))
     print("Class weights (normalized+clipped):", class_weight)
 
-    # 4) Train
+    
     if args.framework == "tf":
         model = train_tf(Xtr, ytr, Xva, yva, class_weight=class_weight)
         probs = model.predict(Xte, verbose=0)
@@ -118,7 +118,7 @@ def main():
             logits = net_eval(torch.from_numpy(Xte))
             yhat = logits.argmax(1).numpy()
 
-    # 5) SHAP (inside main; robust path)
+   
     try:
         bg_size = min(64, Xtr.shape[0])
         sm_size = min(128, Xva.shape[0])
@@ -131,7 +131,7 @@ def main():
     except Exception as _e:
         print("SHAP generation skipped:", _e)
 
-    # 6) Safe report (works even if a class is missing in yhat)
+   
     print(classification_report(yte, yhat, labels=[0,1,2], target_names=CLASS_NAMES, zero_division=0))
 
 if __name__ == "__main__":
